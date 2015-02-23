@@ -55,25 +55,21 @@ addman:
 version:
 	git describe --tags > ~dokku/VERSION  2> /dev/null || echo '~${DOKKU_VERSION} ($(shell date -uIminutes))' > ~dokku/VERSION
 
-plugin-dependencies: pluginhook
+plugin-dependencies: 
 	dokku plugins-install-dependencies
 
-plugins: pluginhook docker
+plugins: docker
 	dokku plugins-install
 
-dependencies: sshcommand pluginhook docker stack help2man
+dependencies: docker stack help2man
 
 help2man:
 	apt-get install -qq -y help2man
 
 sshcommand:
-	wget -qO /usr/local/bin/sshcommand ${SSHCOMMAND_URL}
-	chmod +x /usr/local/bin/sshcommand
+	#wget -qO /usr/local/bin/sshcommand ${SSHCOMMAND_URL}
+	#chmod +x /usr/local/bin/sshcommand
 	sshcommand create dokku /usr/local/bin/dokku
-
-pluginhook:
-	wget -qO /tmp/pluginhook_0.1.0_amd64.deb ${PLUGINHOOK_URL}
-	dpkg -i /tmp/pluginhook_0.1.0_amd64.deb
 
 docker: aufs
 	apt-get install -qq -y curl
